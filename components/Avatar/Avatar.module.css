@@ -1,0 +1,16 @@
+@reference "../../app/globals.css";
+
+.avatar {
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+  width: 2.5rem;
+  height: 2.5rem;
+  border-radius: 9999px;
+  background-color: var(--color-primary);
+  color: var(--color-dark);
+  font-weight: 700;
+  font-size: 0.875rem;
+  letter-spacing: 0.025em;
+  user-select: none;
+}

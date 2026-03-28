@@ -2,6 +2,7 @@
 
 import Navbar from '@/components/Navbar';
 import Skeleton from '@/components/Skeleton';
+import Avatar from '@/components/Avatar';
 
 export default function PreviewPage() {
   return (
@@ -101,6 +102,17 @@ export default function PreviewPage() {
                 <option>Bob</option>
               </select>
             </div>
+          </div>
+        </section>
+
+        {/* Avatar */}
+        <section>
+          <h2 className="preview-label">Avatar</h2>
+          <div className="flex gap-4 items-center">
+            <Avatar name="alice" />
+            <Avatar name="John" />
+            <Avatar name="PocketHeist" />
+            <Avatar name="JohnDoe" />
           </div>
         </section>
 
