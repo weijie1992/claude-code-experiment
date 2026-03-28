@@ -1,6 +1,7 @@
 // preview page for newly created UI components
 
 import Navbar from '@/components/Navbar';
+import Skeleton from '@/components/Skeleton';
 
 export default function PreviewPage() {
   return (
@@ -100,6 +101,14 @@ export default function PreviewPage() {
                 <option>Bob</option>
               </select>
             </div>
+          </div>
+        </section>
+
+        {/* Skeleton */}
+        <section>
+          <h2 className="preview-label">Skeleton</h2>
+          <div style={{ maxWidth: '28rem' }}>
+            <Skeleton />
           </div>
         </section>
 
