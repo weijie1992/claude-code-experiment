@@ -1,7 +1,19 @@
 {
   "permissions": {
-    "allow": [
-      "Bash(git switch:*)"
+    "allow": ["Bash(git switch:*)"]
+  },
+  "hooks": {
+    "PostToolUse": [
+      {
+        "matcher": "Write|Edit",
+        "hooks": [
+          {
+            "type": "command",
+            "command": "jq -r '.tool_input.file_path // .tool_response.filePath' | { read -r f; ./node_modules/.bin/prettier --write \"$f\" --ignore-unknown; } 2>/dev/null || true",
+            "statusMessage": "Running prettier..."
+          }
+        ]
+      }
     ]
   }
 }
