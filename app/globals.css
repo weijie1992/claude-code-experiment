@@ -58,3 +58,15 @@ svg.logo {
 .form-title {
   @apply text-center text-xl font-bold;
 }
+.btn {
+  background-color: var(--color-primary);
+  color: var(--color-dark);
+  font-weight: 600;
+  padding: 0.375rem 1rem;
+  border-radius: 9999px;
+  font-size: 0.875rem;
+  transition: opacity 0.2s ease;
+}
+.btn:hover {
+  opacity: 0.8;
+}

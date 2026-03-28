@@ -28,14 +28,14 @@ The root `app/layout.tsx` sets global metadata and imports `globals.css`. It has
 
 Tailwind CSS 4 is used throughout. Global theme tokens (colours, font) are defined with `@theme` in `app/globals.css`:
 
-| Token | Value | Usage |
-|---|---|---|
-| `primary` | `#C27AFF` | purple accent |
-| `secondary` | `#FB64B6` | pink accent |
-| `dark` | `#030712` | page background |
-| `body` | `#99A1AF` | default text |
-| `heading` | `white` | h1–h4 |
-| `success` / `error` | `#05DF72` / `#FF6467` | status colours |
+| Token               | Value                 | Usage           |
+| ------------------- | --------------------- | --------------- |
+| `primary`           | `#C27AFF`             | purple accent   |
+| `secondary`         | `#FB64B6`             | pink accent     |
+| `dark`              | `#030712`             | page background |
+| `body`              | `#99A1AF`             | default text    |
+| `heading`           | `white`               | h1–h4           |
+| `success` / `error` | `#05DF72` / `#FF6467` | status colours  |
 
 Global layout utility classes also live in `globals.css`: `center-content` (full-height flex centering), `page-content` (constrained width block), `form-title`. Component-scoped styles use CSS Modules (e.g. `Navbar.module.css`).
 
@@ -46,3 +46,10 @@ Components live in `components/` using a barrel-export pattern — each componen
 ## Testing
 
 Tests live in `tests/` mirroring source structure. Vitest is configured with jsdom, global APIs, and `vite-tsconfig-paths` so the `@/*` alias works in test files. Import matchers from `@testing-library/jest-dom` are set up in `vitest.setup.ts`. Tests use React Testing Library — query by role/label rather than class names or test IDs.
+
+## Additional Coding Preferences
+
+- Do NOT use semicolons for Javascript or TypeScript code.
+- Do Not apply tailwind classes directly in component templates unless essential or just 1 at most. If an element needs more than a single tailwind class, combine them into a custom class using the `@apply` directive.
+- use minimal project dependencies where possible
+- Use the `git switch -c` command to switch to new branches, not `git checkout`.
