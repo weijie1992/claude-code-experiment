@@ -7,7 +7,7 @@ import Avatar from '@/components/Avatar';
 export default function PreviewPage() {
   return (
     <>
-      {/* Navbar */}
+      {/* <Navbar /> */}
       <section>
         <h2 className="preview-label">Navbar</h2>
         <Navbar />
