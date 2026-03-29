@@ -19,7 +19,7 @@
         "hooks": [
           {
             "type": "command",
-            "command": "jq -c '{tool: .tool_name, input: .tool_input, at: (now | todate)}' | { read -r entry; f=tool-used.json; arr=$([ -s \"$f\" ] && cat \"$f\" || echo \"[]\"); echo \"$arr\" | jq --argjson e \"$entry\" '. + [$e]' > \"$f\"; } 2>/dev/null || true",
+            "command": "jq -c '{tool: .tool_name, input: .tool_input, at: (now | todate)}' | { read -r entry; f=tool-used.json; tmp=$(mktemp); { [ -s \"$f\" ] && cat \"$f\" || echo \"[]\"; } | jq --argjson e \"$entry\" '. + [$e]' > \"$tmp\" && mv \"$tmp\" \"$f\"; } 2>/dev/null || true",
             "statusMessage": "Logging tool use..."
           }
         ]
