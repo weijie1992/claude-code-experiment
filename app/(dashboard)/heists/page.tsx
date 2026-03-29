@@ -11,5 +11,5 @@ export default function HeistsPage() {
         <h2>All Expired Heists</h2>
       </div>
     </div>
-  )
+  );
 }
