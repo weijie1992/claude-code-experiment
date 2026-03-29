@@ -1,0 +1,5 @@
+@reference "../../app/globals.css";
+
+.userItem {
+  @apply flex items-center;
+}
