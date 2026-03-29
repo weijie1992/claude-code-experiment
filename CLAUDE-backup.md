@@ -10,7 +10,7 @@ npm run build     # Production build
 npm run lint      # Run ESLint
 npm test          # Run all tests (Vitest, watch mode)
 npx vitest run    # Run all tests once (CI-style, no watch)
-npx vitest tests/components/AuthForm.test.tsx  # Run a single test file
+npx vitest tests/components/Navbar.test.tsx  # Run a single test file
 ```
 
 ## Architecture
@@ -22,7 +22,7 @@ npx vitest tests/components/AuthForm.test.tsx  # Run a single test file
 
 The splash page (`(public)/page.tsx`) is intended as a routing gate — it should redirect to `/heists` if the user is logged in, or `/login` if not. Authentication logic is not yet implemented.
 
-The root `app/layout.tsx` sets global metadata, imports `globals.css`, injects `<ThemeScript />` in the head (prevents flash of wrong theme), and renders `<ThemeToggle />` at the end of the body.
+The root `app/layout.tsx` sets global metadata and imports `globals.css`. It has no UI chrome of its own.
 
 ## Styling
 
@@ -33,19 +33,15 @@ Tailwind CSS 4 is used throughout. Global theme tokens (colours, font) are defin
 | `primary`           | `#C27AFF`             | purple accent   |
 | `secondary`         | `#FB64B6`             | pink accent     |
 | `dark`              | `#030712`             | page background |
-| `light`             | `#0A101D`             | card background |
-| `lighter`           | `#101828`             | input/borders   |
 | `body`              | `#99A1AF`             | default text    |
 | `heading`           | `white`               | h1–h4           |
 | `success` / `error` | `#05DF72` / `#FF6467` | status colours  |
 
-Light mode overrides live under `[data-theme='light']` in `globals.css`.
-
-Global layout utility classes also live in `globals.css`: `center-content` (full-height flex centering), `page-content` (constrained width block), `form-title`, `btn` (purple pill button). Component-scoped styles use CSS Modules (e.g. `AuthForm.module.css`). CSS Modules reference theme tokens via `@reference "../../app/globals.css"` — the relative path depends on the component's depth.
+Global layout utility classes also live in `globals.css`: `center-content` (full-height flex centering), `page-content` (constrained width block), `form-title`. Component-scoped styles use CSS Modules (e.g. `Navbar.module.css`).
 
 ## Components
 
-Components live in `components/` using a barrel-export pattern — each component has its own folder with a `ComponentName.tsx`, `ComponentName.module.css`, and `index.ts` that re-exports the default. Import via the `@/` alias: `import AuthForm from "@/components/AuthForm"`.
+Components live in `components/` using a barrel-export pattern — each component has its own folder with a `Navbar.tsx`, `Navbar.module.css`, and `index.ts` that re-exports the default. Import via the `@/` alias: `import Navbar from "@/components/Navbar"`.
 
 ## Testing
 
