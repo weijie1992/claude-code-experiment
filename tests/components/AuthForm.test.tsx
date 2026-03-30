@@ -27,6 +27,11 @@ vi.mock("@/lib/codename", () => ({
   generateCodename: () => "SilentFoxStrikes",
 }));
 
+const mockPush = vi.fn();
+vi.mock("next/navigation", () => ({
+  useRouter: () => ({ push: mockPush }),
+}));
+
 // -------
 
 function fillAndSubmit(mode: "login" | "signup") {
@@ -233,6 +238,11 @@ describe("AuthForm", () => {
           screen.getByText("Something went wrong. Please try again."),
         ).toBeInTheDocument(),
       );
+    });
+
+    it("redirects to /heists after successful signup", async () => {
+      fillAndSubmit("signup");
+      await waitFor(() => expect(mockPush).toHaveBeenCalledWith("/heists"));
     });
   });
 });

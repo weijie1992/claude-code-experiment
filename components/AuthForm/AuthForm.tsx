@@ -1,6 +1,7 @@
 "use client";
 
 import { useState } from "react";
+import { useRouter } from "next/navigation";
 import Link from "next/link";
 import { Eye, EyeOff } from "lucide-react";
 import { createUserWithEmailAndPassword, updateProfile } from "firebase/auth";
@@ -40,6 +41,7 @@ function getErrorMessage(code: string): string {
 }
 
 export default function AuthForm({ mode }: AuthFormProps) {
+  const router = useRouter();
   const [email, setEmail] = useState("");
   const [password, setPassword] = useState("");
   const [showPassword, setShowPassword] = useState(false);
@@ -70,6 +72,7 @@ export default function AuthForm({ mode }: AuthFormProps) {
       const codename = generateCodename();
       await updateProfile(user, { displayName: codename });
       await setDoc(doc(db, "users", user.uid), { id: user.uid, codename });
+      router.push("/heists");
     } catch (err) {
       const code = (err as { code?: string }).code ?? "";
       setError(getErrorMessage(code));
