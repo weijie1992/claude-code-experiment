@@ -8,11 +8,13 @@ const mockUpdateProfile = vi.fn();
 const mockSetDoc = vi.fn();
 const mockDoc = vi.fn();
 const mockCreateUser = vi.fn();
+const mockSignIn = vi.fn();
 
 vi.mock("firebase/auth", () => ({
   createUserWithEmailAndPassword: (...args: unknown[]) =>
     mockCreateUser(...args),
   updateProfile: (...args: unknown[]) => mockUpdateProfile(...args),
+  signInWithEmailAndPassword: (...args: unknown[]) => mockSignIn(...args),
   getAuth: vi.fn(),
 }));
 
@@ -118,43 +120,93 @@ describe("AuthForm", () => {
   });
 
   describe("Form submission — validation", () => {
-    beforeEach(() => {
-      vi.spyOn(console, "log").mockImplementation(() => {});
-    });
-
-    it("does not log when both fields are empty", () => {
+    it("does not call signIn when both fields are empty", () => {
       render(<AuthForm mode="login" />);
       fireEvent.click(screen.getByRole("button", { name: "Log in" }));
-      expect(console.log).not.toHaveBeenCalled();
+      expect(mockSignIn).not.toHaveBeenCalled();
     });
 
-    it("does not log when only email is filled", () => {
+    it("does not call signIn when only email is filled", () => {
       render(<AuthForm mode="login" />);
       fireEvent.change(screen.getByLabelText("Email"), {
         target: { value: "a@b.com" },
       });
       fireEvent.click(screen.getByRole("button", { name: "Log in" }));
-      expect(console.log).not.toHaveBeenCalled();
+      expect(mockSignIn).not.toHaveBeenCalled();
     });
 
-    it("does not log when only password is filled", () => {
+    it("does not call signIn when only password is filled", () => {
       render(<AuthForm mode="login" />);
       fireEvent.change(screen.getByLabelText("Password"), {
         target: { value: "secret" },
       });
       fireEvent.click(screen.getByRole("button", { name: "Log in" }));
-      expect(console.log).not.toHaveBeenCalled();
+      expect(mockSignIn).not.toHaveBeenCalled();
     });
   });
 
-  describe("Form submission — login mode (unchanged)", () => {
-    it("logs email and password when both fields are filled", () => {
-      vi.spyOn(console, "log").mockImplementation(() => {});
+  describe("Form submission — login mode", () => {
+    beforeEach(() => {
+      mockSignIn.mockReset();
+      mockSignIn.mockResolvedValue(undefined);
+    });
+
+    it("calls signInWithEmailAndPassword with email and password", async () => {
       fillAndSubmit("login");
-      expect(console.log).toHaveBeenCalledWith({
-        email: "a@b.com",
-        password: "secret123",
+      await waitFor(() =>
+        expect(mockSignIn).toHaveBeenCalledWith({}, "a@b.com", "secret123"),
+      );
+    });
+
+    it("shows success message on successful login", async () => {
+      fillAndSubmit("login");
+      await waitFor(() =>
+        expect(screen.getByText("You're logged in!")).toBeInTheDocument(),
+      );
+    });
+
+    it("shows error message when Firebase throws", async () => {
+      mockSignIn.mockRejectedValue({ code: "auth/invalid-credential" });
+      fillAndSubmit("login");
+      await waitFor(() =>
+        expect(
+          screen.getByText("Invalid email or password."),
+        ).toBeInTheDocument(),
+      );
+    });
+
+    it("disables the submit button while login is in flight", async () => {
+      let resolveSignIn!: () => void;
+      mockSignIn.mockReturnValue(
+        new Promise((res) => {
+          resolveSignIn = () => res(undefined);
+        }),
+      );
+      render(<AuthForm mode="login" />);
+      fireEvent.change(screen.getByLabelText("Email"), {
+        target: { value: "a@b.com" },
       });
+      fireEvent.change(screen.getByLabelText("Password"), {
+        target: { value: "secret123" },
+      });
+      fireEvent.click(screen.getByRole("button", { name: "Log in" }));
+      expect(screen.getByRole("button", { name: "Log in" })).toBeDisabled();
+      resolveSignIn();
+      await waitFor(() =>
+        expect(
+          screen.getByRole("button", { name: "Log in" }),
+        ).not.toBeDisabled(),
+      );
+    });
+
+    it("does not call signInWithEmailAndPassword in signup mode", async () => {
+      mockCreateUser.mockResolvedValue({ user: { uid: "uid-123" } });
+      mockUpdateProfile.mockResolvedValue(undefined);
+      mockSetDoc.mockResolvedValue(undefined);
+      mockDoc.mockReturnValue("doc-ref");
+      fillAndSubmit("signup");
+      await waitFor(() => expect(mockCreateUser).toHaveBeenCalled());
+      expect(mockSignIn).not.toHaveBeenCalled();
     });
   });
 
