@@ -3,6 +3,10 @@
 import { useState } from "react";
 import Link from "next/link";
 import { Eye, EyeOff } from "lucide-react";
+import { createUserWithEmailAndPassword, updateProfile } from "firebase/auth";
+import { doc, setDoc } from "firebase/firestore";
+import { auth, db } from "@/lib/firebase";
+import { generateCodename } from "@/lib/codename";
 import styles from "./AuthForm.module.css";
 
 interface AuthFormProps {
@@ -26,18 +30,52 @@ const config = {
   },
 } as const;
 
+const errorMessages: Record<string, string> = {
+  "auth/email-already-in-use": "This email is already registered.",
+  "auth/weak-password": "Password must be at least 6 characters.",
+};
+
+function getErrorMessage(code: string): string {
+  return errorMessages[code] ?? "Something went wrong. Please try again.";
+}
+
 export default function AuthForm({ mode }: AuthFormProps) {
   const [email, setEmail] = useState("");
   const [password, setPassword] = useState("");
   const [showPassword, setShowPassword] = useState(false);
+  const [loading, setLoading] = useState(false);
+  const [error, setError] = useState<string | null>(null);
 
   const { submitLabel, footerText, footerLinkText, footerHref, autoComplete } =
     config[mode];
 
-  function handleSubmit(e: React.FormEvent) {
+  async function handleSubmit(e: React.FormEvent) {
     e.preventDefault();
     if (!email || !password) return;
-    console.log({ email, password });
+
+    if (mode === "login") {
+      console.log({ email, password });
+      return;
+    }
+
+    setLoading(true);
+    setError(null);
+
+    try {
+      const { user } = await createUserWithEmailAndPassword(
+        auth,
+        email,
+        password,
+      );
+      const codename = generateCodename();
+      await updateProfile(user, { displayName: codename });
+      await setDoc(doc(db, "users", user.uid), { id: user.uid, codename });
+    } catch (err) {
+      const code = (err as { code?: string }).code ?? "";
+      setError(getErrorMessage(code));
+    } finally {
+      setLoading(false);
+    }
   }
 
   return (
@@ -83,7 +121,13 @@ export default function AuthForm({ mode }: AuthFormProps) {
           </div>
         </div>
 
-        <button type="submit" className={`btn ${styles.submit}`}>
+        {error && <p className={styles.error}>{error}</p>}
+
+        <button
+          type="submit"
+          className={`btn ${styles.submit}`}
+          disabled={loading}
+        >
           {submitLabel}
         </button>
       </form>
