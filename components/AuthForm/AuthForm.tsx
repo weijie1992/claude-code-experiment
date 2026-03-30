@@ -1,8 +1,17 @@
 "use client";
 
 import { useState } from "react";
+import { useRouter } from "next/navigation";
 import Link from "next/link";
 import { Eye, EyeOff } from "lucide-react";
+import {
+  createUserWithEmailAndPassword,
+  updateProfile,
+  signInWithEmailAndPassword,
+} from "firebase/auth";
+import { doc, setDoc } from "firebase/firestore";
+import { auth, db } from "@/lib/firebase";
+import { generateCodename } from "@/lib/codename";
 import styles from "./AuthForm.module.css";
 
 interface AuthFormProps {
@@ -26,18 +35,67 @@ const config = {
   },
 } as const;
 
+const errorMessages: Record<string, string> = {
+  "auth/email-already-in-use": "This email is already registered.",
+  "auth/weak-password": "Password must be at least 6 characters.",
+  "auth/invalid-credential": "Invalid email or password.",
+  "auth/user-not-found": "Invalid email or password.",
+  "auth/too-many-requests": "Too many attempts. Please try again later.",
+};
+
+function getErrorMessage(code: string): string {
+  return errorMessages[code] ?? "Something went wrong. Please try again.";
+}
+
 export default function AuthForm({ mode }: AuthFormProps) {
+  const router = useRouter();
   const [email, setEmail] = useState("");
   const [password, setPassword] = useState("");
   const [showPassword, setShowPassword] = useState(false);
+  const [loading, setLoading] = useState(false);
+  const [error, setError] = useState<string | null>(null);
+  const [success, setSuccess] = useState<string | null>(null);
 
   const { submitLabel, footerText, footerLinkText, footerHref, autoComplete } =
     config[mode];
 
-  function handleSubmit(e: React.FormEvent) {
+  async function handleSubmit(e: React.FormEvent) {
     e.preventDefault();
     if (!email || !password) return;
-    console.log({ email, password });
+
+    setLoading(true);
+    setError(null);
+    setSuccess(null);
+
+    if (mode === "login") {
+      try {
+        await signInWithEmailAndPassword(auth, email, password);
+        setSuccess("You're logged in!");
+      } catch (err) {
+        const code = (err as { code?: string }).code ?? "";
+        setError(getErrorMessage(code));
+      } finally {
+        setLoading(false);
+      }
+      return;
+    }
+
+    try {
+      const { user } = await createUserWithEmailAndPassword(
+        auth,
+        email,
+        password,
+      );
+      const codename = generateCodename();
+      await updateProfile(user, { displayName: codename });
+      await setDoc(doc(db, "users", user.uid), { id: user.uid, codename });
+      router.push("/heists");
+    } catch (err) {
+      const code = (err as { code?: string }).code ?? "";
+      setError(getErrorMessage(code));
+    } finally {
+      setLoading(false);
+    }
   }
 
   return (
@@ -54,7 +112,11 @@ export default function AuthForm({ mode }: AuthFormProps) {
             className={styles.input}
             autoComplete="email"
             value={email}
-            onChange={(e) => setEmail(e.target.value)}
+            onChange={(e) => {
+              setEmail(e.target.value);
+              setError(null);
+              setSuccess(null);
+            }}
           />
         </div>
 
@@ -70,7 +132,11 @@ export default function AuthForm({ mode }: AuthFormProps) {
               className={styles.input}
               autoComplete={autoComplete}
               value={password}
-              onChange={(e) => setPassword(e.target.value)}
+              onChange={(e) => {
+                setPassword(e.target.value);
+                setError(null);
+                setSuccess(null);
+              }}
             />
             <button
               type="button"
@@ -83,7 +149,14 @@ export default function AuthForm({ mode }: AuthFormProps) {
           </div>
         </div>
 
-        <button type="submit" className={`btn ${styles.submit}`}>
+        {error && <p className={styles.error}>{error}</p>}
+        {success && <p className={styles.success}>{success}</p>}
+
+        <button
+          type="submit"
+          className={`btn ${styles.submit}`}
+          disabled={loading}
+        >
           {submitLabel}
         </button>
       </form>
