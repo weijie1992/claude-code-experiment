@@ -1,0 +1,243 @@
+@reference "../globals.css";
+
+@import url("https://fonts.googleapis.com/css2?family=Bebas+Neue&display=swap");
+
+/* ── Background layers ─────────────────────────────── */
+.page {
+  position: relative;
+  min-height: 100lvh;
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  justify-content: center;
+  padding: 4rem 1.5rem;
+  gap: 4rem;
+  overflow: hidden;
+}
+
+.gridBg {
+  position: fixed;
+  inset: 0;
+  background-image:
+    linear-gradient(rgba(194, 122, 255, 0.04) 1px, transparent 1px),
+    linear-gradient(90deg, rgba(194, 122, 255, 0.04) 1px, transparent 1px);
+  background-size: 64px 64px;
+  pointer-events: none;
+  z-index: 0;
+}
+
+.glowTop {
+  position: fixed;
+  top: -18%;
+  left: 50%;
+  transform: translateX(-50%);
+  width: 900px;
+  height: 420px;
+  background: radial-gradient(
+    ellipse,
+    rgba(194, 122, 255, 0.18) 0%,
+    transparent 70%
+  );
+  pointer-events: none;
+  z-index: 0;
+}
+
+.glowBottom {
+  position: fixed;
+  bottom: -22%;
+  right: -8%;
+  width: 640px;
+  height: 640px;
+  background: radial-gradient(
+    circle,
+    rgba(251, 100, 182, 0.1) 0%,
+    transparent 70%
+  );
+  pointer-events: none;
+  z-index: 0;
+}
+
+/* ── Hero ──────────────────────────────────────────── */
+.hero {
+  position: relative;
+  z-index: 1;
+  text-align: center;
+  max-width: 760px;
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  gap: 1.5rem;
+  animation: fadeUp 0.9s cubic-bezier(0.16, 1, 0.3, 1) both;
+}
+
+.badge {
+  display: inline-flex;
+  align-items: center;
+  gap: 0.6rem;
+  font-size: 0.62rem;
+  font-weight: 700;
+  letter-spacing: 0.38em;
+  text-transform: uppercase;
+  color: var(--color-primary);
+  border: 1px solid rgba(194, 122, 255, 0.35);
+  padding: 0.3rem 1rem;
+  border-radius: 3px;
+  animation: fadeUp 0.9s cubic-bezier(0.16, 1, 0.3, 1) 0.05s both;
+}
+
+.badge::before,
+.badge::after {
+  content: "▸";
+  opacity: 0.45;
+}
+
+.title {
+  font-family: "Bebas Neue", sans-serif;
+  font-size: clamp(4.5rem, 13vw, 9rem);
+  line-height: 0.88;
+  letter-spacing: 0.03em;
+  color: white;
+  animation: fadeUp 0.9s cubic-bezier(0.16, 1, 0.3, 1) 0.1s both;
+}
+
+.titleText {
+  background: linear-gradient(155deg, #ffffff 35%, var(--color-primary) 100%);
+  -webkit-background-clip: text;
+  -webkit-text-fill-color: transparent;
+  background-clip: text;
+}
+
+.logoIcon {
+  display: inline-block;
+  vertical-align: middle;
+  width: 0.78em;
+  height: 0.78em;
+  stroke: var(--color-primary);
+  position: relative;
+  top: -0.04em;
+}
+
+.tagline {
+  font-size: 1rem;
+  font-weight: 700;
+  letter-spacing: 0.12em;
+  text-transform: uppercase;
+  color: var(--color-secondary);
+  animation: fadeUp 0.9s cubic-bezier(0.16, 1, 0.3, 1) 0.15s both;
+}
+
+.description {
+  font-size: 1.05rem;
+  line-height: 1.75;
+  color: var(--color-body);
+  max-width: 540px;
+  animation: fadeUp 0.9s cubic-bezier(0.16, 1, 0.3, 1) 0.2s both;
+}
+
+.actions {
+  display: flex;
+  align-items: center;
+  gap: 2rem;
+  flex-wrap: wrap;
+  justify-content: center;
+  animation: fadeUp 0.9s cubic-bezier(0.16, 1, 0.3, 1) 0.25s both;
+}
+
+.registerBtn {
+  display: inline-block;
+  background-color: var(--color-primary);
+  color: var(--color-dark);
+  font-weight: 700;
+  padding: 0.65rem 2.25rem;
+  border-radius: 9999px;
+  font-size: 0.9rem;
+  letter-spacing: 0.04em;
+  box-shadow: 0 0 28px rgba(194, 122, 255, 0.45);
+  transition:
+    box-shadow 0.25s ease,
+    opacity 0.2s ease,
+    transform 0.2s ease;
+}
+
+.registerBtn:hover {
+  opacity: 0.9;
+  box-shadow: 0 0 44px rgba(194, 122, 255, 0.65);
+  transform: translateY(-2px);
+}
+
+.loginLink {
+  font-size: 0.875rem;
+  color: var(--color-body);
+  transition: color 0.2s ease;
+}
+
+.loginLink:hover {
+  color: var(--color-heading);
+}
+
+/* ── Feature cards ─────────────────────────────────── */
+.features {
+  position: relative;
+  z-index: 1;
+  display: grid;
+  grid-template-columns: repeat(auto-fit, minmax(210px, 1fr));
+  gap: 1.25rem;
+  width: 100%;
+  max-width: 860px;
+  animation: fadeUp 0.9s cubic-bezier(0.16, 1, 0.3, 1) 0.35s both;
+}
+
+.featureCard {
+  background: var(--color-light);
+  border: 1px solid rgba(194, 122, 255, 0.13);
+  border-radius: 14px;
+  padding: 1.75rem 1.5rem;
+  display: flex;
+  flex-direction: column;
+  gap: 0.75rem;
+  transition:
+    border-color 0.3s ease,
+    transform 0.3s ease,
+    box-shadow 0.3s ease;
+}
+
+.featureCard:hover {
+  border-color: rgba(194, 122, 255, 0.4);
+  transform: translateY(-4px);
+  box-shadow: 0 12px 36px rgba(194, 122, 255, 0.1);
+}
+
+.featureIconWrap {
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  width: 44px;
+  height: 44px;
+  background: rgba(194, 122, 255, 0.12);
+  border-radius: 10px;
+  color: var(--color-primary);
+}
+
+.featureTitle {
+  font-size: 1rem;
+  font-weight: 700;
+  color: var(--color-heading);
+}
+
+.featureText {
+  font-size: 0.875rem;
+  line-height: 1.65;
+  color: var(--color-body);
+}
+
+/* ── Animations ────────────────────────────────────── */
+@keyframes fadeUp {
+  from {
+    opacity: 0;
+    transform: translateY(22px);
+  }
+  to {
+    opacity: 1;
+    transform: translateY(0);
+  }
+}
