@@ -1,0 +1,85 @@
+@reference "../../app/globals.css";
+
+.card {
+  background-color: var(--color-light);
+  border: 1px solid var(--color-lighter);
+  border-radius: 0.75rem;
+  padding: 2rem;
+  width: 100%;
+  max-width: 32rem;
+}
+
+.heading {
+  font-size: 1.125rem;
+  font-weight: 700;
+  color: var(--color-heading);
+}
+
+.form {
+  display: flex;
+  flex-direction: column;
+  gap: 1.25rem;
+  margin-top: 1.5rem;
+}
+
+.field {
+  display: flex;
+  flex-direction: column;
+  gap: 0.375rem;
+}
+
+.label {
+  font-size: 0.875rem;
+  font-weight: 500;
+  color: var(--color-heading);
+}
+
+.input {
+  background-color: var(--color-lighter);
+  border: 1px solid transparent;
+  border-radius: 0.5rem;
+  padding: 0.5rem 0.75rem;
+  color: var(--color-heading);
+  font-size: 0.875rem;
+  transition: border-color 0.15s ease;
+  outline: none;
+  width: 100%;
+}
+
+.input:focus {
+  border-color: var(--color-primary);
+}
+
+.textarea {
+  background-color: var(--color-lighter);
+  border: 1px solid transparent;
+  border-radius: 0.5rem;
+  padding: 0.5rem 0.75rem;
+  color: var(--color-heading);
+  font-size: 0.875rem;
+  transition: border-color 0.15s ease;
+  outline: none;
+  width: 100%;
+  min-height: 6rem;
+  resize: vertical;
+}
+
+.textarea:focus {
+  border-color: var(--color-primary);
+}
+
+.submit {
+  width: 100%;
+  padding: 0.625rem 1rem;
+  font-size: 0.9375rem;
+}
+
+.loading {
+  font-size: 0.875rem;
+  color: var(--color-body);
+}
+
+.error {
+  font-size: 0.8125rem;
+  color: var(--color-error);
+}
