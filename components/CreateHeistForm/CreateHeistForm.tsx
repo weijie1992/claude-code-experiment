@@ -27,15 +27,26 @@ export default function CreateHeistForm() {
   const [error, setError] = useState<string | null>(null);
 
   useEffect(() => {
+    let isMounted = true;
     async function fetchUsers() {
       try {
         const snapshot = await getDocs(collection(db, COLLECTIONS.USERS));
-        setUsers(snapshot.docs.map((doc) => doc.data() as UserDoc));
+        if (isMounted)
+          setUsers(
+            snapshot.docs.map(
+              (doc) => ({ id: doc.id, ...doc.data() }) as UserDoc,
+            ),
+          );
+      } catch {
+        if (isMounted) setError("Failed to load agents.");
       } finally {
-        setLoadingUsers(false);
+        if (isMounted) setLoadingUsers(false);
       }
     }
     fetchUsers();
+    return () => {
+      isMounted = false;
+    };
   }, []);
 
   async function handleSubmit(e: React.FormEvent) {
