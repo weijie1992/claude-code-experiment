@@ -1,0 +1,88 @@
+@reference "../../app/globals.css";
+
+.card {
+  background-color: var(--color-lighter);
+  border: 1px solid #1e2939;
+  border-radius: 10px;
+  padding: 1.25rem;
+  display: flex;
+  flex-direction: column;
+  gap: 0.75rem;
+  width: 100%;
+}
+
+.titleRow {
+  display: flex;
+  align-items: flex-start;
+  justify-content: space-between;
+  gap: 0.5rem;
+}
+
+.title {
+  color: var(--color-heading);
+  font-size: 1rem;
+  line-height: 1.5;
+  font-weight: 400;
+  text-decoration: none;
+}
+
+.title:hover {
+  text-decoration: underline;
+}
+
+.linkIcon {
+  color: var(--color-body);
+  width: 1rem;
+  height: 1rem;
+  flex-shrink: 0;
+  margin-top: 0.25rem;
+}
+
+.meta {
+  display: flex;
+  flex-direction: column;
+  gap: 0.5rem;
+}
+
+.row {
+  display: flex;
+  align-items: center;
+  gap: 0.5rem;
+  font-size: 0.875rem;
+  line-height: 1.25rem;
+}
+
+.icon {
+  width: 0.75rem;
+  height: 0.75rem;
+  flex-shrink: 0;
+  color: var(--color-body);
+}
+
+.label {
+  color: var(--color-body);
+  white-space: nowrap;
+}
+
+.assignee {
+  color: var(--color-primary);
+  white-space: nowrap;
+  overflow: hidden;
+  text-overflow: ellipsis;
+}
+
+.creator {
+  color: var(--color-secondary);
+  white-space: nowrap;
+  overflow: hidden;
+  text-overflow: ellipsis;
+}
+
+.deadline {
+  color: var(--color-body);
+  white-space: nowrap;
+}
+
+.status {
+  color: var(--color-primary);
+}

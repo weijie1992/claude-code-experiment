@@ -1,0 +1,39 @@
+@reference "../../globals.css";
+
+.section {
+  margin-top: 2rem;
+}
+
+.sectionHeader {
+  display: flex;
+  align-items: center;
+  gap: 0.5rem;
+  margin-bottom: 1rem;
+}
+
+.sectionIcon {
+  width: 1.5rem;
+  height: 1.5rem;
+  color: var(--color-primary);
+  flex-shrink: 0;
+}
+
+.sectionTitle {
+  font-size: 1.125rem;
+  font-weight: 600;
+  color: var(--color-heading);
+}
+
+.grid {
+  @apply grid grid-cols-1 gap-4 sm:grid-cols-2 lg:grid-cols-3;
+}
+
+.empty {
+  color: var(--color-body);
+  font-size: 0.875rem;
+}
+
+.error {
+  color: var(--color-error);
+  font-size: 0.875rem;
+}

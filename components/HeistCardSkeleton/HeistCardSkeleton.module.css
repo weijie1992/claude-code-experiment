@@ -1,0 +1,68 @@
+@reference "../../app/globals.css";
+
+.card {
+  background-color: var(--color-lighter);
+  border: 1px solid #1e2939;
+  border-radius: 10px;
+  padding: 1.25rem;
+  display: flex;
+  flex-direction: column;
+  gap: 0.75rem;
+  width: 100%;
+}
+
+.block {
+  background: linear-gradient(
+    90deg,
+    var(--color-lighter) 25%,
+    color-mix(in srgb, var(--color-lighter) 60%, var(--color-light)) 50%,
+    var(--color-lighter) 75%
+  );
+  background-size: 200% 100%;
+  border-radius: 0.375rem;
+  animation: shimmer 1.6s infinite;
+}
+
+.titleRow {
+  display: flex;
+  align-items: flex-start;
+  justify-content: space-between;
+  gap: 0.5rem;
+}
+
+.titleLine {
+  height: 2.5rem;
+  width: 85%;
+}
+
+.iconPlaceholder {
+  width: 1rem;
+  height: 1rem;
+  flex-shrink: 0;
+  margin-top: 0.25rem;
+}
+
+.meta {
+  display: flex;
+  flex-direction: column;
+  gap: 0.5rem;
+}
+
+.metaLine {
+  height: 0.875rem;
+  width: 60%;
+}
+
+.metaLineShort {
+  height: 0.875rem;
+  width: 75%;
+}
+
+@keyframes shimmer {
+  0% {
+    background-position: 200% 0;
+  }
+  100% {
+    background-position: -200% 0;
+  }
+}
