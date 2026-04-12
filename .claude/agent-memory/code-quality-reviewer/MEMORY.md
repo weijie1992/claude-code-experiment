@@ -1,0 +1,1 @@
+- [Agent Definition Conventions](project_agent_conventions.md) — Schema and body structure conventions observed across .claude/agents/\*.md files
