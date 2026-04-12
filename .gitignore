@@ -42,3 +42,6 @@ next-env.d.ts
 
 /tool-used.json
 
+# claude code worktrees
+.claude/worktrees/
+
