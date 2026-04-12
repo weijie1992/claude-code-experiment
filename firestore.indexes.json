@@ -15,11 +15,6 @@
         { "fieldPath": "createdBy", "order": "ASCENDING" },
         { "fieldPath": "deadline", "order": "ASCENDING" }
       ]
-    },
-    {
-      "collectionGroup": "heists",
-      "queryScope": "COLLECTION",
-      "fields": [{ "fieldPath": "deadline", "order": "ASCENDING" }]
     }
   ],
   "fieldOverrides": []
