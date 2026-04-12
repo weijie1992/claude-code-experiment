@@ -156,9 +156,18 @@ describe("useHeists", () => {
       ).toBe(true);
     });
 
-    it("queries where finalStatus is not null", () => {
-      renderHook(() => useHeists("expired"));
-      expect(mockWhere).toHaveBeenCalledWith("finalStatus", "!=", null);
+    it("filters out heists with null finalStatus client-side", () => {
+      const { result } = renderHook(() => useHeists("expired"));
+      act(() =>
+        capturedOnNext({
+          docs: [
+            { data: () => ({ ...fakeHeist, finalStatus: "success" }) },
+            { data: () => ({ ...fakeHeist, id: "h2", finalStatus: null }) },
+          ],
+        }),
+      );
+      expect(result.current.heists).toHaveLength(1);
+      expect(result.current.heists[0].finalStatus).toBe("success");
     });
   });
 

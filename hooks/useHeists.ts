@@ -46,16 +46,19 @@ export function useHeists(mode: HeistMode): UseHeistsResult {
               where("createdBy", "==", user.uid),
               where("deadline", ">", now),
             )
-          : query(
-              heistsRef,
-              where("deadline", "<", now),
-              where("finalStatus", "!=", null),
-            );
+          : query(heistsRef, where("deadline", "<", now));
 
     const unsubscribe = onSnapshot(
       q,
       (snapshot) => {
-        setHeists(snapshot.docs.map((doc) => doc.data() as Heist));
+        const docs = snapshot.docs.map((doc) => doc.data() as Heist);
+        // Firestore doesn't allow two inequality fields in one query,
+        // so filter finalStatus !== null client-side for the expired mode.
+        setHeists(
+          mode === "expired"
+            ? docs.filter((h) => h.finalStatus !== null)
+            : docs,
+        );
         setLoading(false);
       },
       () => {
